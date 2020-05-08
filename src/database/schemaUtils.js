@@ -1,12 +1,12 @@
+const index = require('../index');
 const logger = require('../logger');
 const driver = require('./driver');
 
 /**
  * Returns a guild modal or creates one if it doesn't exist
  * @param id Guild ID
- * @param name Guild Name
  */
-exports.getGuildModal = async (id, name) => {
+exports.fetchGuild = async (id) => {
     try {
 
       // Make sure it doesn't already exist
@@ -15,12 +15,12 @@ exports.getGuildModal = async (id, name) => {
 
       guildModal = new driver.getModals().Guild({
         _id: id.toString(),
-        name: name
+        name: index.client.guilds.cache.get(id).name
       });
       logger.debug(`Saved new guild to database: ${id}`);
       return (await guildModal.save());
 
     } catch (err) {
-      logger.warn(`Unable to save new guild to database: ${id} - ${name}, Error: ${err.stack}`);
+      logger.warn(`Unable to save new guild to database: ${id}, Error: ${err.stack}`);
     }
 }

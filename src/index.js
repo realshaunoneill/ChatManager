@@ -5,13 +5,14 @@ const path = require('path');
 const Discord = require('discord.js');
 const didYouMean = require("didyoumean");
 
-const logger = require('./logger');
+const logger = exports.logger = require('./logger');
 const driver = require('./database/driver');
 
 const schemaUtils = require('./database/schemaUtils');
 
 const client = exports.client = new Discord.Client();
 client.logger = logger;
+client.dbUtils = schemaUtils;
 
 const PREFIX = process.env.PREFIX;
 const commands = {};
@@ -27,7 +28,7 @@ client.once('ready', () => {
 client.on('message', msg => {
     try {
         // Do all the XP in mainchat stuff
-        const guildModal = schemaUtils.getGuildModal(msg.guild.id, msg.guild.name);
+        const guildModal = schemaUtils.fetchGuild(msg.guild.id, msg.guild.name);
 
 
         // Handle all supported commands
@@ -55,7 +56,7 @@ client.on('message', msg => {
 });
 
 client.on('guildCreate', guild => {
-    schemaUtils.getGuildModal(guild.id, guild.name);
+    schemaUtils.fetchGuild(guild.id);
 })
 
 const initCommands = () => {
