@@ -24,6 +24,7 @@
     "didyoumean": "^1.2.1",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
+    "mongoose": "^5.9.12",
     "winston": "^3.2.1"
   },
   "devDependencies": {

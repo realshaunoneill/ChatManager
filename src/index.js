@@ -6,6 +6,9 @@ const Discord = require('discord.js');
 const didYouMean = require("didyoumean");
 
 const logger = require('./logger');
+const driver = require('./database/driver');
+
+const schemaUtils = require('./database/schemaUtils');
 
 const client = exports.client = new Discord.Client();
 client.logger = logger;
@@ -16,10 +19,18 @@ const commands = {};
 client.once('ready', () => {
     logger.info(`Successfully signed into Discord... ${client.user.tag}`);
     initCommands();
+
+    // Run database driver
+    driver.connect();
 });
 
 client.on('message', msg => {
     try {
+        // Do all the XP in mainchat stuff
+        const guildModal = schemaUtils.getGuildModal(msg.guild.id, msg.guild.name);
+
+
+        // Handle all supported commands
         if (msg.author.bot || msg.channel.type !== "text") return;
         if (!msg.content.startsWith(PREFIX)) return;
 
@@ -41,6 +52,10 @@ client.on('message', msg => {
     } catch (err) {
         logger.warn(`Something broke while handing a message, Error: ${err.stack}`);
     }
+});
+
+client.on('guildCreate', guild => {
+    schemaUtils.getGuildModal(guild.id, guild.name);
 })
 
 const initCommands = () => {
