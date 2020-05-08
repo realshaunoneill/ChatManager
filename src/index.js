@@ -82,6 +82,6 @@ const initCommands = () => {
     } catch (err) {
         logger.error(`Unable to load commands, Error: ${err.stack}`)
     }
-}
+};
 
 client.login(process.env.TOKEN);

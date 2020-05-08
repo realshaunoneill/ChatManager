@@ -23,4 +23,4 @@ exports.fetchGuild = async (id) => {
     } catch (err) {
       logger.warn(`Unable to save new guild to database: ${id}, Error: ${err.stack}`);
     }
-}
+};
