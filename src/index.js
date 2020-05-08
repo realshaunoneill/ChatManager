@@ -27,12 +27,12 @@ client.once('ready', () => {
 
 client.on('message', msg => {
     try {
-        // Do all the XP in mainchat stuff
-        const guildModal = schemaUtils.fetchGuild(msg.guild.id, msg.guild.name);
+        if (msg.author.bot || msg.channel.type !== "text") return;
 
+        // Do all the XP in mainchat stuff (Keep below prefix for test)
+        schemaUtils.addXpGain(msg.guild.id, msg.channel.id, msg.author.id);
 
         // Handle all supported commands
-        if (msg.author.bot || msg.channel.type !== "text") return;
         if (!msg.content.startsWith(PREFIX)) return;
 
         logger.info(PREFIX)
